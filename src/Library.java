@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 public class Library {
     private Books[] books;
 
@@ -11,8 +14,7 @@ public class Library {
     private static int memberCnt = 0;
 
 
-
-    private int memberIdCntr = 0;
+    private int memberIdCntr = 890654;
 
     // Constructor to initialise the maxmimum books and maximum members library can have and the book count.
     public Library(int maxBookCount, int maxMember) {
@@ -52,15 +54,34 @@ public class Library {
     public void checkOutBook(int bookIndex) {
         if (bookIndex >= 0 && books[bookIndex].availableCopies > 0 && bookCount > bookIndex) {
             books[bookIndex].availableCopies--;
+            // set the due date for the book that's checked out - 14 days validity
+            LocalDate dueDate = LocalDate.now().plusWeeks(2);
+            books[bookIndex].setDueDate(dueDate);
+            System.out.println("Book checked out with the due date: " + dueDate);
         } else {
             System.out.println("Cannot Check out: insufficient copies or given bookIndex invalid");
         }
     }
 
     // Method to check in a book back into the library
-        public void checkInBook(int bookIndex) {
+    public void checkInBook(int bookIndex, int memberId) {
         if (bookIndex >= 0 && bookCount > bookIndex) {
+            Books book = books[bookIndex];
             books[bookIndex].availableCopies++;
+            if (book.dueDate != null) {
+                LocalDate dueDate = book.getDueDate();
+                LocalDate today = LocalDate.now();
+                if (today.isAfter(dueDate)) {
+                    long daysLate = ChronoUnit.DAYS.between(dueDate, today);
+                    double fine = daysLate * 2;
+                    int memberIndex = findMemberById(memberId);
+                    if (memberIndex != -1) {
+                        members[memberIndex].addFine(fine);
+                        System.out.println("Sorry : Book returned late. Fine added: $" + fine);
+                    }
+                }
+                book.clearDueDate();
+            }
         } else {
             System.out.println("Sorry, Given bookIndex is invalid");
         }
@@ -93,6 +114,7 @@ public class Library {
         }
 
     }
+
     // Method to search for a book by its title
     public Books searchBookByTitle(String title) {
         if (title != null && books != null && bookCount > 0) {
@@ -172,6 +194,22 @@ public class Library {
         }
     }
 
+    // Reserve the book
+    public void reserveBook(int bookIndex, int memberId) {
+        if (bookIndex >= 0 && bookIndex < bookCount) {
+            if (books[bookIndex].availableCopies == 0) {
+                // get the member id who reserved that book
+                books[bookIndex].reservedBy = memberId;
+                System.out.println("Book reserved by Member " + memberId);
+            } else {
+                System.out.println("Book is available");
+            }
+        } else {
+            System.out.println("Invalid book index.");
+        }
+    }
+
+
     public static void main(String[] args) {
         Library library = new Library(25, 15);
 
@@ -179,6 +217,10 @@ public class Library {
         library.addBook("789064", " Effective Java", "Addison Wesley", 3);
         library.addBook("678934", " Java - The Complete Reference", "Herbert Schildt", 2);
         library.addBook("456734", " Head First Java", "Kathy Sierra & Bert Bates", 4);
+
+
+        library.addMember("Ashwini Hegde");
+        library.addMember("Surya Nair");
 
         int index = library.findBookByISBN("456734");
         if (index != -1) {
@@ -189,7 +231,7 @@ public class Library {
         System.out.println("After check out ");
         library.displayBookDetails(index);
 
-        library.checkInBook(index);
+        library.checkInBook(index, 1);
         System.out.println("After Book check In ");
         library.displayBookDetails(index);
 
@@ -206,9 +248,6 @@ public class Library {
         System.out.println("Library has the following books : ");
         library.displayAllBooks();
 
-
-        library.addMember("Ashwini Hegde");
-        library.addMember("Surya Nair");
 
         int memberIndex = library.findMemberById(1);
         System.out.println("The result of finding member with memberId is ");

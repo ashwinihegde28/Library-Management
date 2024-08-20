@@ -11,6 +11,9 @@ This project is a simple Library Management System implemented using basic datas
      4) availableCopies: Number of copies available in the library.
    -  Methods:
       1) toString(): Overridden method, provides a string representation of the book details.
+      2) setDueDate(): Sets the new due date on Check out of each book.
+      3) getDueDate(): Will retrieve the due date in yyyy-MM-dd format.
+      4) clearDueDate(): Clears the due date.
    -  Constructor: Initializes a book with its ISBN, title, author, and available copies.
          
 2. **Member.java**
@@ -21,6 +24,7 @@ This project is a simple Library Management System implemented using basic datas
      3) fines: Fine amount due by the member (if any).
    - Methods:
      1) toString(): Provides a string representation of the member details.
+     2) addFine : Adds $2 per day for late submission. 
    - Constructor: Initializes a member with their name.
    
 3. **Library.java**

@@ -3,6 +3,10 @@
  * It includes details such as ISBN, title, author, available copies,
  * due date for borrowed books, and information about reservation.
  */
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Books {
     String isbn;
     String title;
@@ -19,6 +23,20 @@ public class Books {
         this.title = title;
         this.author = author;
         this.availableCopies = availableCopies;
+    }
+
+    // Set the due date when the book is checked out
+    public void setDueDate(LocalDate date) {
+        this.dueDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public LocalDate getDueDate() {
+        return LocalDate.parse(this.dueDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    // Due date must be cleared and set to null when  the book is returned
+    public void clearDueDate() {
+        this.dueDate = null;
     }
 
     // Returns A string representation of the Books object
