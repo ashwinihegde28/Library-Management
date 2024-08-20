@@ -1,12 +1,20 @@
 public class Library {
     private Books[] books;
+
+    // Counter for the number of books in the library
     private int bookCount;
 
+    // Counter for the number of members in the library
     private Member[] members;
+
+    // Counter for generating unique member IDs
     private static int memberCnt = 0;
+
+
 
     private int memberIdCntr = 0;
 
+    // Constructor to initialise the maxmimum books and maximum members library can have and the book count.
     public Library(int maxBookCount, int maxMember) {
         books = new Books[maxBookCount];
         bookCount = 0;
@@ -15,6 +23,8 @@ public class Library {
 
 
     // Code for the Book Management goes here
+
+    // Method to add a new book to the library
     public void addBook(String isbn, String title, String author, int copies) {
         if (bookCount < books.length) {
             books[bookCount] = new Books(isbn, title, author, copies);
@@ -25,6 +35,7 @@ public class Library {
         }
     }
 
+    // Method to find a book by its ISBN
     public int findBookByISBN(String isbn) {
         if (isbn != null && books != null) {
             for (int i = 0; i < books.length; i++) {
@@ -37,6 +48,7 @@ public class Library {
         return -1;
     }
 
+    // Method to check out a book from the library
     public void checkOutBook(int bookIndex) {
         if (bookIndex >= 0 && books[bookIndex].availableCopies > 0 && bookCount > bookIndex) {
             books[bookIndex].availableCopies--;
@@ -45,7 +57,8 @@ public class Library {
         }
     }
 
-    public void checkInBook(int bookIndex) {
+    // Method to check in a book back into the library
+        public void checkInBook(int bookIndex) {
         if (bookIndex >= 0 && bookCount > bookIndex) {
             books[bookIndex].availableCopies++;
         } else {
@@ -53,6 +66,7 @@ public class Library {
         }
     }
 
+    // Method to display the details of a specific book
     public void displayBookDetails(int bookIndex) {
         if (bookIndex >= 0 && bookCount > bookIndex) {
             Books book = books[bookIndex];
@@ -65,6 +79,7 @@ public class Library {
         }
     }
 
+    // Method to display the details of all books in the library
     public void displayAllBooks() {
         if (bookCount == 0) {
             System.out.println("No books are available in the library.");
@@ -78,7 +93,7 @@ public class Library {
         }
 
     }
-
+    // Method to search for a book by its title
     public Books searchBookByTitle(String title) {
         if (title != null && books != null && bookCount > 0) {
             for (int i = 0; i < bookCount; i++) {
@@ -92,6 +107,7 @@ public class Library {
         return null;
     }
 
+    // Method to search for a book by its author
     public Books searchBookByAuthor(String author) {
         if (author != null && books != null && bookCount > 0) {
             for (int i = 0; i < bookCount; i++) {
@@ -106,6 +122,7 @@ public class Library {
 
 
     // Code for the Member Management goes here
+    // Method to add a new member to the library
     public void addMember(String name) {
         if (memberCnt < members.length) {
             members[memberCnt] = new Member(name);
@@ -119,6 +136,7 @@ public class Library {
 
     }
 
+    // Method to find a member by their ID
     public int findMemberById(int memberId) {
         if (memberId > 0) {
             for (int i = 0; i < memberCnt; i++) {
@@ -133,7 +151,7 @@ public class Library {
 
     }
 
-
+    // Method to display the details of a specific member
     public void displayMemberDetails(int memberIndex) {
         if (memberIndex >= 0 && memberCnt > memberIndex) {
             Member member = members[memberIndex];
@@ -144,6 +162,7 @@ public class Library {
         }
     }
 
+    // Method to display the details of all members in the library
     public void displayAllMembers() {
         System.out.println("Displaying all the members");
         for (int i = 0; i < memberCnt; i++) {
